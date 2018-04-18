@@ -71,6 +71,13 @@ const tableData = (state = initialState, action) => {
             console.log({...state, columns: newColumns, rows});
             return {...state, columns: newColumns, rows};
 
+        case types.ADD_ROW:
+            console.log('in add row');
+            rows.push(addRow(columns));
+            options.series = getSeries(rows);
+
+            return {...state, options, rows};
+
         case types.CHANGE_COLUMN:
             console.log('in change column');
 
@@ -85,6 +92,7 @@ const tableData = (state = initialState, action) => {
 
 
             return {...state, rows: newRows};
+
 
         default:
             return state;
