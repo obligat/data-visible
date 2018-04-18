@@ -102,7 +102,6 @@ const tableData = (state = initialState, action) => {
             rows[action.i].data[action.j].value = fixNaN(action.payload);
             options.series = getSeries(rows);
 
-            console.log({...state});
             return {...state};
         default:
             return state;
@@ -133,7 +132,7 @@ function getSeries(rows) {
     let copy = JSON.parse(JSON.stringify(rows));
     copy = filterChecked(copy).map(row => {
         row.data = filterChecked(row.data).map(item => {
-            return item.value;
+            return isNaN(item.value) ? 0 : item.value;
         });
         return row;
     });
