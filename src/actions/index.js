@@ -57,21 +57,9 @@ export function changeRow(index) {
     }
 }
 
-
-/*
-
-const addColumnHeader = () => (dispatch, getState) => {
-    const {options} = getState();
-    dispatch({
-        type: ...,
-        payload: {
-            ...state,
-            a: j,
-            b: s
-        }
-    })
+export function chooseType(value) {
+    return {
+        type: types.CHOOSE_TYPE,
+        payload: value
+    }
 }
-
-export {
-    addColumnHeader
-}*/

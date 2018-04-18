@@ -2,7 +2,7 @@ import {combineReducers} from 'redux';
 import * as types from '../actions/constants';
 
 const initialState = {
-    columns: [{type: 'Column1', checked: true}, {type: 'Column2', checked: true}, {type: 'Column3', checked: true}],
+    columns: [{type: 'Column1', checked: true}, {type: 'Column2', checked: true}],
     rows: [],
     options: {
         chart: {
@@ -23,12 +23,14 @@ const initialState = {
             }
         },
         series: []
-    }
+    },
+    chartTypes: ['line', 'bar', 'pie', 'area', 'scatter'],
+    curType: 'line'
 };
 
 
 const tableData = (state = initialState, action) => {
-    const {options, columns, rows} = state;
+    const {options, columns, rows, curType} = state;
     let newColumns, newRows;
     switch (action.type) {
         case types.RESET_TABLE:
@@ -38,22 +40,6 @@ const tableData = (state = initialState, action) => {
             options.series = getSeries(initialState.rows);
 
             return {...initialState, options, rows: initialState.rows};
-        // case types.ADD_COLUMN_HEADER:
-        //     options.xAxis.categories = [...xAxis.categories, `Column${xAxis.categories.length + 1}`];
-        //     series.map(item => item.data.push(...getEmptyArrLength(1)));
-        //     return {...state};
-        // case types.ADD_ROW:
-        //     options.series.push({name: '', data: getEmptyArrLength(xAxis.categories.length)});
-        //     return {...state};
-        // case types.UPDATE_COLUMN_HEADER:
-        //     options.xAxis.categories[action.index] = action.payload;
-        //     return {...state};
-        // case types.UPDATE_ROW_NAME:
-        //     options.series[action.index].name = action.payload;
-        //     return {...state};
-        // case types.UPDATE_ROW_DATA:
-        //     series[action.i].data[action.j] = fixNaN(action.payload);
-        //     return {...state};
 
         case types.ADD_COLUMN_HEADER:
             newColumns = columns.concat({type: `Column${columns.length + 1}`, checked: false});
@@ -103,6 +89,10 @@ const tableData = (state = initialState, action) => {
             options.series = getSeries(rows);
 
             return {...state};
+
+        case types.CHOOSE_TYPE:
+            options.chart.type = action.payload;
+            return {...state, curType: action.payload};
         default:
             return state;
     }

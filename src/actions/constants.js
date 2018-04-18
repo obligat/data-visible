@@ -11,3 +11,5 @@ export const UPDATE_ROW_DATA = 'UPDATE_ROW_DATA';
 
 export const CHANGE_COLUMN = 'CHANGE_COLUMN';
 export const CHANGE_ROW = 'CHANGE_ROW';
+
+export const CHOOSE_TYPE = 'CHOOSE_TYPE';

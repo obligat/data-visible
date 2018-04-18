@@ -108,6 +108,13 @@ html, body {
   right: 0;
   bottom: 0; }
 
+.chart-selection {
+  position: absolute;
+  top: 0;
+  right: 0; }
+  .chart-selection select {
+    height: 28px; }
+
 .highed-ok-button {
   border: none;
   outline: none;

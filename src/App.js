@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import ReactHighcharts from 'react-highcharts';
 import Table from './components/Table';
-import {resetTable, addRow, addColumnHeader, changeRow} from "./actions";
+import {resetTable, addRow, addColumnHeader, changeRow, chooseType} from "./actions";
 import {connect} from "react-redux";
 import ReactIScroll from 'react-iscroll';
 import iScroll from 'iscroll';
@@ -74,7 +74,7 @@ class App extends Component {
     }
 
     render() {
-        const {options, rows} = this.props.tableData;
+        const {options, rows, chartTypes, curType} = this.props.tableData;
         // options.xAxis.categories = toData(dataset).categories;
         // // options.series = toData(dataset).series;
         // options.series = [{name: '', data: getEmptyArrByColumnLength(toData(dataset).categories.length)}];
@@ -101,29 +101,41 @@ class App extends Component {
 
 
                 <div className="highed-toolbar-right">
-                    <div className="highed-ok-button highed-toolbar-button" onClick={() => this.props.addRow()}>ADD
-                        ROW
+                    <div className="highed-ok-button highed-toolbar-button" onClick={() => this.props.addRow()}>添加行
                     </div>
                     <div className="highed-ok-button highed-toolbar-button"
-                         onClick={() => this.props.addColumnHeader()}>ADD COLUMN
+                         onClick={() => this.props.addColumnHeader()}>添加列
                     </div>
                     <div className="highed-ok-button highed-toolbar-button"
-                         onClick={() => this.props.resetTable()}>CLEAR DATA
+                         onClick={() => this.props.resetTable()}>清空数据
                     </div>
-                    <div className="highed-ok-button highed-toolbar-button"
+                    {/*<div className="highed-ok-button highed-toolbar-button"
                          title="Import Google Spreadsheet">Google Sheet
-                    </div>
-                    <div className="highed-ok-button highed-toolbar-button"
-                         title="Download data">EXPORT DATA
-                    </div>
-                    <div className="highed-ok-button highed-toolbar-button"
-                         title="undefined">IMPORT
-                    </div>
+                    </div>*/}
+                    <div className="highed-ok-button highed-toolbar-button">导入数据</div>
+                    <div className="highed-ok-button highed-toolbar-button">导出数据</div>
+                </div>
+                <div className="chart-selection">
+                    <select name="chart-type" id="type" className="highed-ok-button highed-toolbar-button"
+                            value={curType} onChange={(e) => this.props.chooseType(e.target.value)}>
+                        {
+                            chartTypes.map((item, index) => <option value={item}
+                                                                    key={index}>{optionOfType[item]}</option>)
+                        }
+                    </select>
                 </div>
             </div>
         );
     }
 }
+
+const optionOfType = {
+    'line': '折线图',
+    'bar': '条形图',
+    'pie': '饼图',
+    'area': '面积图',
+    'scatter': '散点图'
+};
 
 function toData(dataset) {
     let res = {
@@ -150,7 +162,7 @@ function getEmptyArrByColumnLength(length) {
 
 
 const mapStateToProps = state => state;
-const mapDispatchToProps = ({resetTable, addRow, addColumnHeader, changeRow});
+const mapDispatchToProps = ({resetTable, addRow, addColumnHeader, changeRow, chooseType});
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

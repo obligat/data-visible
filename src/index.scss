@@ -18,8 +18,8 @@ html, body {
   flex: 1;
   height: 100%;
   background: #222;
-  
-  .checkbox-wrapper{
+
+  .checkbox-wrapper {
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -29,7 +29,7 @@ html, body {
     width: 40px;
     height: 100%;
 
-    .checkbox-item{
+    .checkbox-item {
       height: 40px;
       display: flex;
       align-items: center;
@@ -141,6 +141,15 @@ html, body {
   bottom: 0;
 }
 
+.chart-selection {
+  position: absolute;
+  top: 0;
+  right: 0;
+  select {
+    height: 28px;
+  }
+}
+
 .highed-ok-button {
   border: none;
   outline: none;
@@ -168,7 +177,7 @@ html, body {
 }
 
 .highed-ok-button:hover {
-  background: #4cb369
+  background: #4cb369;
 }
 
 .highed-toolbar-button {
