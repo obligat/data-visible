@@ -14,31 +14,17 @@ class Row extends Component {
     }
 
     handleUpdateRowData(e, index) {
-        console.log(index);
         this.setState({
             curIndex: index,
             value: e.target.value,
         });
-        console.group(' update data');
-        console.log(e.target.value);
-        console.log(index);
-        console.log(this.state.curIndex);
-        console.groupEnd();
-
     }
 
     handleUpdateRowName(e, i) {
-        console.group(' update name');
-        console.log(e.target.value);
-        console.log(i);
-        console.log(this.state.curIndex);
-        console.groupEnd()
-
         this.setState({
             isFocusName: true,
-            curIndex: null
+            curIndex: undefined
         });
-
 
         this.props.updateRowName(i, e.target.value)
     }
@@ -55,12 +41,16 @@ class Row extends Component {
 
         this.setState({
             isFocusName: false,
-            curIndex: null,
-            value: null
+            curIndex: undefined,
+            value: undefined
         });
 
         if (index >= 0) {
-            this.props.updateRowData(i, index, parseFloat(value))
+            try {
+                this.props.updateRowData(i, index, parseFloat(value))
+            } catch (err) {
+                console.log(err);
+            }
         }
 
     }

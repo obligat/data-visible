@@ -33,7 +33,7 @@ const tableData = (state = initialState, action) => {
     switch (action.type) {
         case types.RESET_TABLE:
             initialState.rows = [];
-            initialState.rows.push(addRow(initialState.columns));
+            initialState.rows.push(addRow(initialState.columns, initialState.rows.length + 1));
             options.xAxis.categories = getCategories(columns);
             options.series = getSeries(initialState.rows);
 
@@ -68,7 +68,7 @@ const tableData = (state = initialState, action) => {
             return {...state, columns: newColumns, rows};
 
         case types.ADD_ROW:
-            rows.push(addRow(columns));
+            rows.push(addRow(columns, rows.length + 1));
             options.series = getSeries(rows);
 
             return {...state, options, rows};
@@ -86,6 +86,24 @@ const tableData = (state = initialState, action) => {
             options.series = getSeries(rows);
             return {...state, rows, options};
 
+        case types.UPDATE_COLUMN_HEADER:
+            columns[action.index].type = action.payload;
+            options.xAxis.categories = getCategories(columns);
+
+            return {...state};
+
+        case types.UPDATE_ROW_NAME:
+            rows[action.index].name = action.payload;
+            options.series = getSeries(rows);
+
+            return {...state};
+
+        case types.UPDATE_ROW_DATA:
+            rows[action.i].data[action.j].value = fixNaN(action.payload);
+            options.series = getSeries(rows);
+
+            console.log({...state});
+            return {...state};
         default:
             return state;
     }
@@ -97,11 +115,11 @@ function mapColumns(arr) {
     })
 }
 
-function addRow(columns) {
+function addRow(columns, length) {
     const copyCols = JSON.parse(JSON.stringify(columns));
     const row = {
-        name: '',
-        checked: false,
+        name: `row_${length}`,
+        checked: true,
         data: []
     };
     row.data = copyCols.map(item => {

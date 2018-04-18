@@ -12,6 +12,7 @@ import {PersistGate} from 'redux-persist/integration/react'
 const persistConfig = {
     key: 'root',
     storage,
+    whitelist:['columns','rows']
 };
 
 const persistedReducer = persistReducer(persistConfig, dataSource);
@@ -19,19 +20,16 @@ const persistedReducer = persistReducer(persistConfig, dataSource);
 const store = createStore(dataSource);
 const persistor = persistStore(store);
 
-
 ReactDOM.render(
     <Provider store={store}>
         <App/>
     </Provider>
     , document.getElementById('root'));
 
-/*
-ReactDOM.render(
+/*ReactDOM.render(
     <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
             <App/>
         </PersistGate>
     </Provider>
-    , document.getElementById('root'));
-*/
+    , document.getElementById('root'));*/
