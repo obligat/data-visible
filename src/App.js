@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import ReactHighcharts from 'react-highcharts';
 import Table from './components/Table';
-import {resetTable, addRow, addColumnHeader} from "./actions";
+import {resetTable, addRow, addColumnHeader, changeRow} from "./actions";
 import {connect} from "react-redux";
 import ReactIScroll from 'react-iscroll';
 import iScroll from 'iscroll';
@@ -87,7 +87,7 @@ class App extends Component {
                         {
                             rows.map((item, index) => <div className="checkbox-item" key={index}>
                                     <input type="checkbox"
-                                           onChange={() => this.props.changeRow(index)}/>
+                                           onChange={() => this.props.changeRow(index)} checked={item.checked}/>
                                 </div>
                             )
                         }
@@ -150,7 +150,7 @@ function getEmptyArrByColumnLength(length) {
 
 
 const mapStateToProps = state => state;
-const mapDispatchToProps = ({resetTable, addRow, addColumnHeader});
+const mapDispatchToProps = ({resetTable, addRow, addColumnHeader, changeRow});
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

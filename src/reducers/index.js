@@ -32,13 +32,11 @@ const tableData = (state = initialState, action) => {
     let newColumns, newRows;
     switch (action.type) {
         case types.RESET_TABLE:
-            console.log('in reset table');
             initialState.rows = [];
             initialState.rows.push(addRow(initialState.columns));
             options.xAxis.categories = getCategories(columns);
             options.series = getSeries(initialState.rows);
 
-            console.log({...initialState, options, rows: initialState.rows});
             return {...initialState, options, rows: initialState.rows};
         // case types.ADD_COLUMN_HEADER:
         //     options.xAxis.categories = [...xAxis.categories, `Column${xAxis.categories.length + 1}`];
@@ -58,7 +56,6 @@ const tableData = (state = initialState, action) => {
         //     return {...state};
 
         case types.ADD_COLUMN_HEADER:
-            console.log('in add column');
             newColumns = columns.concat({type: `Column${columns.length + 1}`, checked: false});
             rows.forEach(item => item.data = item.data.concat({
                 type: `Column${columns.length + 1}`,
@@ -68,31 +65,26 @@ const tableData = (state = initialState, action) => {
             options.xAxis.categories = getCategories(newColumns);
             options.series = getSeries(rows);
 
-            console.log({...state, columns: newColumns, rows});
             return {...state, columns: newColumns, rows};
 
         case types.ADD_ROW:
-            console.log('in add row');
             rows.push(addRow(columns));
             options.series = getSeries(rows);
 
             return {...state, options, rows};
 
         case types.CHANGE_COLUMN:
-            console.log('in change column');
 
             [newColumns, newRows] = changeColumn(columns, rows, action.payload);
             options.xAxis.categories = getCategories(newColumns);
             options.series = getSeries(newRows);
 
-            console.log({...state, columns: newColumns, rows: newRows});
             return {...state, columns: newColumns, rows: newRows};
 
         case types.CHANGE_ROW:
-
-
-            return {...state, rows: newRows};
-
+            rows[action.payload].checked = !rows[action.payload].checked;
+            options.series = getSeries(rows);
+            return {...state, rows, options};
 
         default:
             return state;
@@ -109,15 +101,13 @@ function addRow(columns) {
     const copyCols = JSON.parse(JSON.stringify(columns));
     const row = {
         name: '',
-        checked: true,
+        checked: false,
         data: []
     };
     row.data = copyCols.map(item => {
         item.value = undefined;
         return {...item};
     });
-    console.log(columns);
-
     return row;
 }
 
