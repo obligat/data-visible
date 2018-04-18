@@ -100,7 +100,8 @@ html, body {
             font-size: 24px; }
 
 .data-show-panel {
-  flex: 1; }
+  flex: 1;
+  position: relative; }
 
 /* 按钮样式 */
 .highed-toolbar-right {
@@ -110,7 +111,7 @@ html, body {
 
 .chart-selection {
   position: absolute;
-  top: 0;
+  bottom: 0;
   right: 0; }
   .chart-selection select {
     height: 28px; }

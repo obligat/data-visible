@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "highcharts": "^6.0.7",
+    "highcharts-exporting": "^0.1.7",
+    "highcharts-more": "^0.1.7",
     "iscroll": "^5.2.0",
     "node-sass-chokidar": "^1.2.2",
     "react": "^16.3.1",

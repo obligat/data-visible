@@ -6,7 +6,7 @@ const initialState = {
     rows: [],
     options: {
         chart: {
-            type: 'bar'
+            type: 'line'
         },
         title: {
             text: '图表标题'

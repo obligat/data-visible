@@ -6,6 +6,10 @@ import {connect} from "react-redux";
 import ReactIScroll from 'react-iscroll';
 import iScroll from 'iscroll';
 
+import HighchartsExporting from 'highcharts-exporting';
+
+HighchartsExporting(ReactHighcharts.Highcharts);
+
 class App extends Component {
 
     constructor(props) {
@@ -67,6 +71,7 @@ class App extends Component {
         // });
 
         this.props.resetTable();
+        ReactHighcharts.Highcharts.getOptions()
     }
 
     afterRender(chart) {
@@ -93,36 +98,34 @@ class App extends Component {
                         }
                     </div>
                     <Table/>
+                    <div className="highed-toolbar-right">
+                        <div className="highed-ok-button highed-toolbar-button" onClick={() => this.props.addRow()}>添加行
+                        </div>
+                        <div className="highed-ok-button highed-toolbar-button"
+                             onClick={() => this.props.addColumnHeader()}>添加列
+                        </div>
+                        <div className="highed-ok-button highed-toolbar-button"
+                             onClick={() => this.props.resetTable()}>清空数据
+                        </div>
+                        {/*<div className="highed-ok-button highed-toolbar-button"
+                         title="Import Google Spreadsheet">Google Sheet
+                    </div>*/}
+                        <div className="highed-ok-button highed-toolbar-button">导入数据</div>
+                        <div className="highed-ok-button highed-toolbar-button">导出数据</div>
+                    </div>
                 </ReactIScroll>
 
                 <div className="data-show-panel">
                     <ReactHighcharts config={options} callback={this.afterRender}/>
-                </div>
-
-
-                <div className="highed-toolbar-right">
-                    <div className="highed-ok-button highed-toolbar-button" onClick={() => this.props.addRow()}>添加行
+                    <div className="chart-selection">
+                        <select name="chart-type" id="type" className="highed-ok-button highed-toolbar-button"
+                                value={curType} onChange={(e) => this.props.chooseType(e.target.value)}>
+                            {
+                                chartTypes.map((item, index) => <option value={item}
+                                                                        key={index}>{optionOfType[item]}</option>)
+                            }
+                        </select>
                     </div>
-                    <div className="highed-ok-button highed-toolbar-button"
-                         onClick={() => this.props.addColumnHeader()}>添加列
-                    </div>
-                    <div className="highed-ok-button highed-toolbar-button"
-                         onClick={() => this.props.resetTable()}>清空数据
-                    </div>
-                    {/*<div className="highed-ok-button highed-toolbar-button"
-                         title="Import Google Spreadsheet">Google Sheet
-                    </div>*/}
-                    <div className="highed-ok-button highed-toolbar-button">导入数据</div>
-                    <div className="highed-ok-button highed-toolbar-button">导出数据</div>
-                </div>
-                <div className="chart-selection">
-                    <select name="chart-type" id="type" className="highed-ok-button highed-toolbar-button"
-                            value={curType} onChange={(e) => this.props.chooseType(e.target.value)}>
-                        {
-                            chartTypes.map((item, index) => <option value={item}
-                                                                    key={index}>{optionOfType[item]}</option>)
-                        }
-                    </select>
                 </div>
             </div>
         );

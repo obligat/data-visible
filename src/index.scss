@@ -131,6 +131,7 @@ html, body {
 
 .data-show-panel {
   flex: 1;
+  position: relative;
 }
 
 /* 按钮样式 */
@@ -143,7 +144,7 @@ html, body {
 
 .chart-selection {
   position: absolute;
-  top: 0;
+  bottom: 0;
   right: 0;
   select {
     height: 28px;
