@@ -10,12 +10,12 @@ class TBody extends Component {
     }
 
     render() {
-        const {series} = this.props.tableData.options;
-        return (<tbody className="highed-dtable-body">
-            {
-                series.map((item, index) => <Row key={index} {...item} i={index}/>)
-            }
-            </tbody>
+        const {rows} = this.props.tableData;
+        return (<div className="row-body">
+                {
+                    rows.map((item, index) => <Row key={index} {...item} i={index}/>)
+                }
+            </div>
         )
     }
 }

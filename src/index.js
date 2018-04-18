@@ -5,18 +5,19 @@ import App from './App';
 import {createStore, applyMiddleware, compose, combineReducers} from 'redux';
 import {Provider} from 'react-redux';
 import dataSource from './reducers';
-import * as methods from './actions';
+import {persistStore, persistReducer} from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import {PersistGate} from 'redux-persist/integration/react'
 
+const persistConfig = {
+    key: 'root',
+    storage,
+};
+
+const persistedReducer = persistReducer(persistConfig, dataSource);
+// const store = createStore(persistedReducer);
 const store = createStore(dataSource);
-//
-// console.log(store.dispatch(methods.addColumnHeader()));
-// console.log(store.dispatch(methods.addRow()));
-// console.log(store.dispatch(methods.addRow()));
-// console.log(store.dispatch(methods.addRow()));
-// console.log(store.dispatch(methods.updateColumnHeader(2, 'hello')));
-// console.log(store.dispatch(methods.updateRowName(0, 'nnnnn')));
-// console.log(store.dispatch(methods.updateRowData(0, 1, 'nnnnn')));
-// console.log(store.getState());
+const persistor = persistStore(store);
 
 
 ReactDOM.render(
@@ -25,3 +26,12 @@ ReactDOM.render(
     </Provider>
     , document.getElementById('root'));
 
+/*
+ReactDOM.render(
+    <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+            <App/>
+        </PersistGate>
+    </Provider>
+    , document.getElementById('root'));
+*/

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {addColumnHeader, updateColumnHeader} from '../actions';
+import {updateColumnHeader, changeColumn} from '../actions';
 
 class Theader extends Component {
     constructor(props) {
@@ -9,25 +9,24 @@ class Theader extends Component {
     }
 
     render() {
-        const {xAxis} = this.props.tableData.options;
+        const {columns} = this.props.tableData;
 
         return (
-            <div className="highed-dtable-top-bar">
-                <span className="highed-dtable-top-bar-col" style={{width: 140}}>
-                       <div className="">Categories</div>
-                 </span>
+            <div className="row-header">
+                <div className="row-header-th"><input
+                    className="row-header-th-input"
+                    value="categories" readOnly/></div>
                 {
-                    xAxis.categories.map((item, index) => {
-                        return (<span key={index} className="highed-dtable-top-bar-col" style={{width: 140}}>
-                            <input className="highed-dtable-input highed-dtable-input-header"
+                    columns.map((item, index) => {
+                        return (<div key={index} className="row-header-th">
+                            <input type="text" className="row-header-th-input"
                                    onChange={(e) => this.props.updateColumnHeader(index, e.target.value)}
-                                   value={item}/>
-                         </span>)
+                                   value={item.type}/>
+                            <input type="checkbox" className="row-header-th-checkbox" checked={item.checked}
+                                   onChange={() => this.props.changeColumn(index)}/>
+                        </div>)
                     })
                 }
-                <a className="highed-dtable-top-bar-col" style={{border: 'none'}}>
-                    <i className="fa fa-plus-circle fa-2x" onClick={() => this.props.addColumnHeader()}></i>
-                </a>
             </div>
         )
     }
@@ -35,7 +34,7 @@ class Theader extends Component {
 }
 
 const mapStateToProps = state => state;
-const mapDispatchToProps = ({addColumnHeader, updateColumnHeader});
+const mapDispatchToProps = ({updateColumnHeader, changeColumn});
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(Theader);

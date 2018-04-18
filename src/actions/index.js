@@ -26,6 +26,13 @@ export function updateColumnHeader(index, text) {
     }
 }
 
+export function changeColumn(index) {
+    return {
+        type: types.CHANGE_COLUMN,
+        payload: index
+    }
+}
+
 export function updateRowName(index, name) {
     return {
         type: types.UPDATE_ROW_NAME,
@@ -40,6 +47,13 @@ export function updateRowData(i, j, text) {
         payload: text,
         i,
         j
+    }
+}
+
+export function changeRow(index) {
+    return {
+        type: types.CHANGE_ROW,
+        payload: index
     }
 }
 

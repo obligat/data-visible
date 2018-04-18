@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import ReactHighcharts from 'react-highcharts';
-import './App.css';
 import Table from './components/Table';
-import {resetTable} from "./actions";
+import {resetTable, addRow, addColumnHeader} from "./actions";
 import {connect} from "react-redux";
+import ReactIScroll from 'react-iscroll';
+import iScroll from 'iscroll';
 
 class App extends Component {
 
@@ -65,7 +66,7 @@ class App extends Component {
         //     options
         // });
 
-
+        this.props.resetTable();
     }
 
     afterRender(chart) {
@@ -73,18 +74,51 @@ class App extends Component {
     }
 
     render() {
-        const {options} = this.props.tableData;
+        const {options, rows} = this.props.tableData;
         // options.xAxis.categories = toData(dataset).categories;
         // // options.series = toData(dataset).series;
         // options.series = [{name: '', data: getEmptyArrByColumnLength(toData(dataset).categories.length)}];
 
         return (
             <div className="highed-vsplitter">
-                <div className="panel bottom highed-scrollbar">
+
+                <ReactIScroll iScroll={iScroll} className="table-container">
+                    <div className="checkbox-wrapper">
+                        {
+                            rows.map((item, index) => <div className="checkbox-item">
+                                    <input type="checkbox"
+                                           onChange={() => this.props.changeRow(index)}/>
+                                </div>
+                            )
+                        }
+                    </div>
                     <Table/>
-                </div>
+                </ReactIScroll>
+
                 <div className="data-show-panel">
                     <ReactHighcharts config={options} callback={this.afterRender}/>
+                </div>
+
+
+                <div className="highed-toolbar-right">
+                    <div className="highed-ok-button highed-toolbar-button" onClick={() => this.props.addRow()}>ADD
+                        ROW
+                    </div>
+                    <div className="highed-ok-button highed-toolbar-button"
+                         onClick={() => this.props.addColumnHeader()}>ADD COLUMN
+                    </div>
+                    <div className="highed-ok-button highed-toolbar-button"
+                         onClick={() => this.props.resetTable()}>CLEAR DATA
+                    </div>
+                    <div className="highed-ok-button highed-toolbar-button"
+                         title="Import Google Spreadsheet">Google Sheet
+                    </div>
+                    <div className="highed-ok-button highed-toolbar-button"
+                         title="Download data">EXPORT DATA
+                    </div>
+                    <div className="highed-ok-button highed-toolbar-button"
+                         title="undefined">IMPORT
+                    </div>
                 </div>
             </div>
         );
@@ -116,7 +150,7 @@ function getEmptyArrByColumnLength(length) {
 
 
 const mapStateToProps = state => state;
-const mapDispatchToProps = ({resetTable});
+const mapDispatchToProps = ({resetTable, addRow, addColumnHeader});
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
