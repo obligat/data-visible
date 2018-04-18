@@ -33,12 +33,13 @@ const tableData = (state = initialState, action) => {
     switch (action.type) {
         case types.RESET_TABLE:
             console.log('in reset table');
-            rows.push(addRow(columns));
+            initialState.rows = [];
+            initialState.rows.push(addRow(initialState.columns));
             options.xAxis.categories = getCategories(columns);
-            options.series = getSeries(rows);
+            options.series = getSeries(initialState.rows);
 
-            console.log({...initialState, options});
-            return {...initialState, options, rows};
+            console.log({...initialState, options, rows: initialState.rows});
+            return {...initialState, options, rows: initialState.rows};
         // case types.ADD_COLUMN_HEADER:
         //     options.xAxis.categories = [...xAxis.categories, `Column${xAxis.categories.length + 1}`];
         //     series.map(item => item.data.push(...getEmptyArrLength(1)));
