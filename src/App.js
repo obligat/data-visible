@@ -105,7 +105,7 @@ class App extends Component {
     }
 
     fileUpload(file) {
-        const url = 'http://127.0.0.1:3000/upload';
+        const url = 'http://47.93.61.38:3000/upload';
         const formData = new FormData();
         formData.append('file', file);
         console.log(file);
