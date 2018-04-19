@@ -5,8 +5,10 @@ import {resetTable, addRow, addColumnHeader, changeRow, chooseType} from "./acti
 import {connect} from "react-redux";
 import ReactIScroll from 'react-iscroll';
 import iScroll from 'iscroll';
+import axios, {post} from 'axios';
 
 import HighchartsExporting from 'highcharts-exporting';
+import FileUpload from 'react-fileupload';
 
 HighchartsExporting(ReactHighcharts.Highcharts);
 
@@ -38,7 +40,14 @@ class App extends Component {
                     name: '',
                     data: [undefined, undefined, undefined]
                 }]
-            }
+            },
+            uploadOptions: {
+                baseUrl: 'http://127.0.0.1',
+                param: {
+                    fid: 0
+                }
+            },
+            file: null
         };
 
         this.afterRender = this.afterRender.bind(this)
@@ -71,11 +80,43 @@ class App extends Component {
         // });
 
         this.props.resetTable();
-        ReactHighcharts.Highcharts.getOptions()
+        ReactHighcharts.Highcharts.getOptions();
+    }
+
+    componentDidUpdate() {
+        // this.refs['fileUpload'].filesToUpload([this.state.file])
     }
 
     afterRender(chart) {
 
+    }
+
+    handleFileUpload(e) {
+        this.setState({
+            file: e.target.files[0]
+        })
+    }
+
+    handleClickUpload() {
+        this.fileUpload(this.state.file).then((response) => {
+            console.log('in response');
+            console.log(response);
+        })
+    }
+
+    fileUpload(file) {
+        const url = 'http://127.0.0.1:3000/upload';
+        const formData = new FormData();
+        formData.append('file', file);
+        console.log(file);
+        console.log(formData);
+
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        };
+        return post(url, formData, config)
     }
 
     render() {
@@ -110,7 +151,19 @@ class App extends Component {
                         {/*<div className="highed-ok-button highed-toolbar-button"
                          title="Import Google Spreadsheet">Google Sheet
                     </div>*/}
-                        <div className="highed-ok-button highed-toolbar-button">导入数据</div>
+                        <div className="highed-ok-button highed-toolbar-button">
+                            <input type="file" name="file" onChange={(e) => this.handleFileUpload(e)}/>
+                            <button onClick={() => this.handleClickUpload()}>upload</button>
+                            {/* <FileUpload options={this.state.uploadOptions} ref={(el) => this.fileUpload = el}>
+                                <button ref={(el) => {
+                                    this.uploadBtn = el;
+                                }}>upload
+                                </button>
+                            </FileUpload>*/}
+
+
+                        </div>
+
                         <div className="highed-ok-button highed-toolbar-button">导出数据</div>
                     </div>
                 </ReactIScroll>
