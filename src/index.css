@@ -17,6 +17,15 @@ html, body {
   height: 100%;
   background: #222;
   position: relative; }
+  .table-container .choose-all-checkbox {
+    position: absolute;
+    top: 5px;
+    left: 13px;
+    display: flex;
+    flex-direction: column; }
+    .table-container .choose-all-checkbox input {
+      margin-bottom: 5px;
+      background: aliceblue; }
   .table-container .checkbox-wrapper {
     position: absolute;
     display: flex;

@@ -20,6 +20,19 @@ html, body {
   background: #222;
   position: relative;
 
+  .choose-all-checkbox{
+    position: absolute;
+    top: 5px;
+    left: 13px;
+    display:flex;
+    flex-direction:column;
+
+    input{
+      margin-bottom:5px;
+      background:aliceblue;
+    }
+  }
+
   .checkbox-wrapper {
     position: absolute;
     display: flex;

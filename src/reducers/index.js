@@ -33,8 +33,8 @@ const initialState = {
 
 
 const tableData = (state = initialState, action) => {
-    const {options, columns, rows, curType} = state;
-    let newColumns, newRows;
+    const {options, columns, rows} = state;
+    let newColumns;
     switch (action.type) {
         case types.RESET_TABLE:
             initialState.rows = [];
@@ -42,7 +42,6 @@ const tableData = (state = initialState, action) => {
             options.xAxis.categories = getCategories(columns);
             options.series = getSeries(initialState.rows);
 
-            console.log({...initialState, options, rows: initialState.rows});
             return {...initialState, options, rows: initialState.rows};
 
         case types.ADD_COLUMN_HEADER:
@@ -99,9 +98,6 @@ const tableData = (state = initialState, action) => {
             return {...state, curType: action.payload};
 
         case types.IMPORT_FILE:
-            console.log('in import file');
-
-            console.log(action.payload);
             const newColName = action.payload[0].shift();
             let newCols = action.payload.shift();
             newCols = mapColumns(newCols);
@@ -114,8 +110,38 @@ const tableData = (state = initialState, action) => {
             options.xAxis.categories = getCategories(newCols);
             options.series = getSeries(newRows);
 
-            console.log({...state, colName: newColName, columns: newCols, rows: newRows});
             return {...state, colName: newColName, columns: newCols, rows: newRows};
+
+        case types.CHOOSE_ALL_COLUMNS:
+            newColumns = columns.map(item => {
+                item.checked = true;
+                return item;
+            });
+            rows.forEach(row => row.data.forEach(item => item.checked = true));
+            options.xAxis.categories = getCategories(newColumns);
+            options.series = getSeries(rows);
+            return {...state, columns: newColumns};
+
+        case types.CANCEL_ALL_COLUMNS:
+            newColumns = columns.map(item => {
+                item.checked = false;
+                return item;
+            });
+            rows.forEach(row => row.data.forEach(item => item.checked = false));
+            options.xAxis.categories = getCategories(newColumns);
+            options.series = getSeries(rows);
+
+            return {...state, columns: newColumns};
+
+        case types.CHOOSE_ALL_ROWS:
+            rows.forEach(row => row.checked = true);
+            options.series = getSeries(rows);
+            return {...state};
+
+        case types.CANCEL_ALL_ROWS:
+            rows.forEach(row => row.checked = false);
+            options.series = getSeries(rows);
+            return {...state};
 
         default:
             return state;
@@ -177,18 +203,6 @@ function getCategories(columns) {
     return filterChecked(columns).map(item => item.type);
 }
 
-/*
-function getSeries(rows) {
-    const checkedRows = filterChecked(rows);
-    const seriesData = checkedRows.map(item => {
-
-        return item.data.filter(item => {
-            return item.checked === true;
-        }).map(item => item.value);
-    });
-
-    return seriesData;
-}*/
 
 function changeColumn(columns, rows, index) {
     const copyCols = JSON.parse(JSON.stringify(columns));
@@ -210,22 +224,8 @@ function filterChecked(arr) {
     return arr.filter(item => item.checked === true);
 }
 
-function updateRowsChecked(rows, index) {
-    const copy = JSON.parse(JSON.stringify(rows));
-    copy.forEach((item, id) => {
-        if (id === index) {
-            item.checked = !item.checked;
-        }
-    });
-    return copy;
-}
-
 function fixNaN(num) {
     return num === num ? num : undefined;
-}
-
-function getEmptyArrLength(length) {
-    return [...new Array(length)]
 }
 
 

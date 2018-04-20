@@ -1,7 +1,4 @@
-export const CHANGE_CELL = 'CHANGE_CELL';
 export const ADD_ROW = 'ADD_ROW';
-export const DELETE_ROW = 'DELETE_ROW';
-export const ADD_COLUMN = 'ADD_COLUMN';
 
 export const RESET_TABLE = 'RESET_TABLE';
 export const ADD_COLUMN_HEADER = 'ADD_COLUMN_HEADER';
@@ -16,3 +13,8 @@ export const CHOOSE_TYPE = 'CHOOSE_TYPE';
 
 export const IMPORT_FILE = 'IMPORT_FILE';
 export const EXPORT_FILE = 'EXPORT_FILE';
+
+export const CHOOSE_ALL_COLUMNS = 'CHOOSE_ALL_COLUMNS';
+export const CANCEL_ALL_COLUMNS = 'CANCEL_ALL_COLUMNS';
+export const CHOOSE_ALL_ROWS = 'CHOOSE_ALL_ROWS';
+export const CANCEL_ALL_ROWS = 'CANCEL_ALL_ROWS';

@@ -76,3 +76,28 @@ export function exportFile() {
         type: types.EXPORT_FILE
     }
 }
+
+export function chooseAllColumns() {
+    return {
+        type: types.CHOOSE_ALL_COLUMNS
+    }
+}
+
+export function cancelAllColumns() {
+    return {
+        type: types.CANCEL_ALL_COLUMNS
+    }
+}
+
+
+export function chooseAllRows() {
+    return {
+        type: types.CHOOSE_ALL_ROWS
+    }
+}
+
+export function cancelAllRows() {
+    return {
+        type: types.CANCEL_ALL_ROWS
+    }
+}
