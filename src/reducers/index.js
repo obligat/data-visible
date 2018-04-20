@@ -33,7 +33,7 @@ const initialState = {
 
 
 const tableData = (state = initialState, action) => {
-    const {options, columns, rows} = state;
+    const {options, columns, rows, colName} = state;
     let newColumns;
     switch (action.type) {
         case types.RESET_TABLE:
@@ -113,8 +113,20 @@ const tableData = (state = initialState, action) => {
             options.xAxis.categories = getCategories(newCols);
             options.series = getSeries(newRows);
 
-            console.log({...state, colName: newColName, columns: newCols, rows: newRows})
             return {...state, colName: newColName, columns: newCols, rows: newRows};
+
+        case types.EXPORT_FILE:
+            let data = [];
+
+            const cols = toDataCol(columns);
+            cols.unshift(colName);
+
+            data.push(cols);
+            data = data.concat(toDataRow(rows));
+
+            handleExportFile(data);
+
+            return {...state};
 
         case types.CHOOSE_ALL_COLUMNS:
             newColumns = columns.map(item => {
@@ -175,6 +187,24 @@ function mapRow(rowArr, columns) {
     return row;
 }
 
+function toDataCol(cols) {
+    return cols.map(item => item.type);
+}
+
+function toDataRow(rows) {
+    const data = [];
+    rows.forEach(row => {
+        const t = [];
+        t.push(row.name);
+        row.data.forEach(item => {
+            t.push(item.value);
+        });
+
+        data.push(t);
+    });
+    return data;
+}
+
 
 function addRow(columns, length) {
     const copyCols = JSON.parse(JSON.stringify(columns));
@@ -233,9 +263,9 @@ function fixNaN(num) {
 }
 
 
-function exportFile() {
+function handleExportFile(data) {
     /* convert state to workbook */
-    const ws = XLSX.utils.aoa_to_sheet(this.state.data);
+    const ws = XLSX.utils.aoa_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "SheetJS");
     /* generate XLSX file and send to client */

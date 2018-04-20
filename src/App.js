@@ -8,6 +8,7 @@ import {
     changeRow,
     chooseType,
     importFile,
+    exportFile,
     chooseAllColumns,
     chooseAllRows,
     cancelAllColumns,
@@ -69,16 +70,6 @@ class App extends Component {
         };
         if (rABS) reader.readAsBinaryString(file); else reader.readAsArrayBuffer(file);
     };
-
-    exportFile() {
-        /* convert state to workbook */
-        const ws = XLSX.utils.aoa_to_sheet(this.state.data);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "SheetJS");
-        /* generate XLSX file and send to client */
-        XLSX.writeFile(wb, "sheetjs.xlsx")
-    };
-
 
     handleFileUpload(e) {
         this.setState({
@@ -143,7 +134,9 @@ class App extends Component {
                         <div className="highed-ok-button highed-toolbar-button"><DataInput
                             handleFile={this.handleFile}/>
                         </div>
-                        <div className="highed-ok-button highed-toolbar-button">导出数据</div>
+                        <div className="highed-ok-button highed-toolbar-button"
+                             onClick={() => this.props.exportFile()}>导出数据
+                        </div>
                     </div>
                 </div>
             </div>
@@ -226,6 +219,7 @@ const mapDispatchToProps = ({
     changeRow,
     chooseType,
     importFile,
+    exportFile,
     chooseAllColumns,
     chooseAllRows,
     cancelAllColumns,
