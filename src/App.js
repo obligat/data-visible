@@ -92,7 +92,7 @@ class App extends Component {
         let isCheckedAllCols, isCheckedAllRows;
         isCheckedAllCols = columns.every(item => item.checked === true);
         isCheckedAllRows = rows.every(item => item.checked === true);
-        
+
         return (
             <div className="highed-vsplitter">
 

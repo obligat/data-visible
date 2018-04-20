@@ -98,6 +98,9 @@ const tableData = (state = initialState, action) => {
             return {...state, curType: action.payload};
 
         case types.IMPORT_FILE:
+            if (!action.payload[0]) {
+                return {...state};
+            }
             const newColName = action.payload[0].shift();
             let newCols = action.payload.shift();
             newCols = mapColumns(newCols);
@@ -110,6 +113,7 @@ const tableData = (state = initialState, action) => {
             options.xAxis.categories = getCategories(newCols);
             options.series = getSeries(newRows);
 
+            console.log({...state, colName: newColName, columns: newCols, rows: newRows})
             return {...state, colName: newColName, columns: newCols, rows: newRows};
 
         case types.CHOOSE_ALL_COLUMNS:
@@ -159,7 +163,7 @@ function mapRow(rowArr, columns) {
     const copyCols = JSON.parse(JSON.stringify(columns));
     const row = {
         name: rowArr.shift(),
-        checked: true,
+        checked: false,
         data: []
     };
 
