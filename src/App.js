@@ -100,7 +100,6 @@ class App extends Component {
                     <Table/>
                 </ReactIScroll>
 
-
                 <div className="data-show-panel">
                     <ReactHighcharts config={options} callback={this.afterRender}/>
                     <div className="chart-selection">
@@ -111,6 +110,9 @@ class App extends Component {
                                                                         key={index}>{optionOfType[item]}</option>)
                             }
                         </select>
+                    </div>
+                    <div className="setting" style={{position:'absolute', top:10,left:10}}>
+                        <i className="fa fal fa-cog"></i>
                     </div>
                     <DragDropFile handleFile={this.handleFile}>
 
