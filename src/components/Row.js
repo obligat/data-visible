@@ -47,7 +47,7 @@ class Row extends Component {
 
         if (index >= 0) {
             try {
-                this.props.updateRowData(i, index, parseFloat(value))
+                this.props.updateRowData(i, index, value)
             } catch (err) {
                 console.log(err);
             }
