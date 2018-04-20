@@ -1,4 +1,3 @@
-import 'bootstrap/dist/css/bootstrap.css';
 import XLSX from 'xlsx';
 import React, {Component} from 'react';
 
