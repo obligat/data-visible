@@ -17,19 +17,6 @@ html, body {
   height: 100%;
   background: #222;
   position: relative; }
-  .table-container .drag-container {
-    position: absolute;
-    top: 30vh;
-    left: 20vh;
-    width: 80vh;
-    height: 50vh;
-    border-radius: 16px;
-    border: 4px dashed #9e9e9e2b; }
-    .table-container .drag-container::after {
-      content: '拖放区域';
-      font-size: 50px;
-      color: #cccccc1f;
-      margin: 50px; }
   .table-container .checkbox-wrapper {
     position: absolute;
     display: flex;
@@ -118,6 +105,19 @@ html, body {
   position: relative; }
   .data-show-panel .btn-import {
     display: none; }
+  .data-show-panel .drag-container {
+    position: absolute;
+    top: 60vh;
+    left: 10vh;
+    width: 80vh;
+    height: 30vh;
+    border-radius: 16px;
+    border: 4px dashed #9e9e9e2b; }
+    .data-show-panel .drag-container::after {
+      content: '拖放区域';
+      font-size: 50px;
+      color: #cccccc1f;
+      margin: 50px; }
 
 /* 按钮样式 */
 .highed-toolbar-right {

@@ -192,10 +192,6 @@ class App extends Component {
                         }
                     </div>
                     <Table/>
-                    <DragDropFile handleFile={this.handleFile}>
-
-                    </DragDropFile>
-
                 </ReactIScroll>
 
 
@@ -210,6 +206,9 @@ class App extends Component {
                             }
                         </select>
                     </div>
+                    <DragDropFile handleFile={this.handleFile}>
+
+                    </DragDropFile>
 
                     <div className="highed-toolbar-right">
                         <div className="highed-ok-button highed-toolbar-button" onClick={() => this.props.addRow()}>添加行
