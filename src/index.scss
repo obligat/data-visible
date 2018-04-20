@@ -113,13 +113,13 @@ html, body {
 
           .row-body-input-focus {
             text-align: center;
-            color: #333;
-            background: #fff;
+            color: #fafafa;
+            background: #333;
             width: 100%;
             height: 90%;
             outline: none;
             border: none;
-            font-size: 24px;
+            font-size: 28px;
           }
 
         }
@@ -151,7 +151,7 @@ html, body {
       content: '拖放区域';
       font-size: 50px;
       color: #cccccc1f;
-      margin:50px;
+      margin:20vh;
     }
   }
 }

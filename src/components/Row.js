@@ -52,7 +52,12 @@ class Row extends Component {
                 console.log(err);
             }
         }
+    }
 
+    handleKeyPress(e) {
+        if (e.keyCode === 13) {
+            e.currentTarget.blur()
+        }
     }
 
     render() {
@@ -75,6 +80,7 @@ class Row extends Component {
                                onChange={(e) => this.handleUpdateRowData(e, index)}
                                onFocus={() => this.handleFocus(index)}
                                onBlur={(e) => this.handleInputBlur(e, i, index)}
+                               onKeyDown={(e) => this.handleKeyPress(e)}
                         />
                     </div>
                 })

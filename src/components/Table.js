@@ -9,9 +9,13 @@ class Table extends Component {
         super(props);
     }
 
+    handleBodyBlur(e) {
+        e.currentTarget.blur();
+    }
+
     render() {
         return (
-            <div className="table-wrapper">
+            <div className="table-wrapper" onClick={(e) => this.handleBodyBlur(e)}>
                 <THeader/>
                 <TBody/>
             </div>
