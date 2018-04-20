@@ -9,13 +9,13 @@ class Theader extends Component {
     }
 
     render() {
-        const {columns} = this.props.tableData;
+        const {columns, colName} = this.props.tableData;
 
         return (
             <div className="row-header">
                 <div className="row-header-th"><input
                     className="row-header-th-input"
-                    value="categories" readOnly/></div>
+                    value={colName} readOnly/></div>
                 {
                     columns.map((item, index) => {
                         return (<div key={index} className="row-header-th">

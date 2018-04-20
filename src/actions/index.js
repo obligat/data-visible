@@ -63,3 +63,16 @@ export function chooseType(value) {
         payload: value
     }
 }
+
+export function importFile(data) {
+    return {
+        type: types.IMPORT_FILE,
+        payload: data
+    }
+}
+
+export function exportFile() {
+    return {
+        type: types.EXPORT_FILE
+    }
+}

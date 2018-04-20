@@ -1,9 +1,12 @@
 import {combineReducers} from 'redux';
 import * as types from '../actions/constants';
+import XLSX from 'xlsx';
+
 
 const initialState = {
     columns: [{type: 'Column1', checked: true}, {type: 'Column2', checked: true}],
     rows: [],
+    colName: '',
     options: {
         chart: {
             type: 'line'
@@ -39,6 +42,7 @@ const tableData = (state = initialState, action) => {
             options.xAxis.categories = getCategories(columns);
             options.series = getSeries(initialState.rows);
 
+            console.log({...initialState, options, rows: initialState.rows});
             return {...initialState, options, rows: initialState.rows};
 
         case types.ADD_COLUMN_HEADER:
@@ -93,6 +97,26 @@ const tableData = (state = initialState, action) => {
         case types.CHOOSE_TYPE:
             options.chart.type = action.payload;
             return {...state, curType: action.payload};
+
+        case types.IMPORT_FILE:
+            console.log('in import file');
+
+            console.log(action.payload);
+            const newColName = action.payload[0].shift();
+            let newCols = action.payload.shift();
+            newCols = mapColumns(newCols);
+            let rawRows = action.payload;
+            let newRows = [];
+            rawRows.forEach(item => {
+                newRows.push(mapRow(item, newCols));
+            });
+
+            options.xAxis.categories = getCategories(newCols);
+            options.series = getSeries(newRows);
+
+            console.log({...state, colName: newColName, columns: newCols, rows: newRows});
+            return {...state, colName: newColName, columns: newCols, rows: newRows};
+
         default:
             return state;
     }
@@ -100,9 +124,27 @@ const tableData = (state = initialState, action) => {
 
 function mapColumns(arr) {
     return arr.map(item => {
-        return {type: item, checked: true}
+        return {type: item, checked: false}
     })
 }
+
+
+function mapRow(rowArr, columns) {
+    const copyCols = JSON.parse(JSON.stringify(columns));
+    const row = {
+        name: rowArr.shift(),
+        checked: true,
+        data: []
+    };
+
+    row.data = copyCols.map((item, index) => {
+        item.value = rowArr[index];
+        return {...item};
+    });
+
+    return row;
+}
+
 
 function addRow(columns, length) {
     const copyCols = JSON.parse(JSON.stringify(columns));
@@ -122,7 +164,8 @@ function getSeries(rows) {
     let copy = JSON.parse(JSON.stringify(rows));
     copy = filterChecked(copy).map(row => {
         row.data = filterChecked(row.data).map(item => {
-            return isNaN(item.value) ? 0 : item.value;
+            const value = parseFloat(item.value);
+            return isNaN(value) ? 0 : value;
         });
         return row;
     });
@@ -184,5 +227,16 @@ function fixNaN(num) {
 function getEmptyArrLength(length) {
     return [...new Array(length)]
 }
+
+
+function exportFile() {
+    /* convert state to workbook */
+    const ws = XLSX.utils.aoa_to_sheet(this.state.data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "SheetJS");
+    /* generate XLSX file and send to client */
+    XLSX.writeFile(wb, "sheetjs.xlsx")
+}
+
 
 export default combineReducers({tableData})

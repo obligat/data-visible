@@ -15,7 +15,21 @@ html, body {
 .table-container {
   flex: 1;
   height: 100%;
-  background: #222; }
+  background: #222;
+  position: relative; }
+  .table-container .drag-container {
+    position: absolute;
+    top: 30vh;
+    left: 20vh;
+    width: 80vh;
+    height: 50vh;
+    border-radius: 16px;
+    border: 4px dashed #9e9e9e2b; }
+    .table-container .drag-container::after {
+      content: '拖放区域';
+      font-size: 50px;
+      color: #cccccc1f;
+      margin: 50px; }
   .table-container .checkbox-wrapper {
     position: absolute;
     display: flex;
@@ -102,11 +116,13 @@ html, body {
 .data-show-panel {
   flex: 1;
   position: relative; }
+  .data-show-panel .btn-import {
+    display: none; }
 
 /* 按钮样式 */
 .highed-toolbar-right {
   position: absolute;
-  right: 0;
+  left: 5px;
   bottom: 0; }
 
 .chart-selection {
@@ -119,6 +135,7 @@ html, body {
 .highed-ok-button {
   border: none;
   outline: none;
+  max-height: 32px;
   margin-bottom: 10px;
   margin-top: 10px;
   text-align: center;

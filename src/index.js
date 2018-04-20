@@ -7,12 +7,14 @@ import {Provider} from 'react-redux';
 import dataSource from './reducers';
 import {persistStore, persistReducer} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import {PersistGate} from 'redux-persist/integration/react'
+import {PersistGate} from 'redux-persist/integration/react';
+
+import SheetJSApp from './Test';
 
 const persistConfig = {
     key: 'root',
     storage,
-    whitelist:['columns','rows']
+    whitelist: ['columns', 'rows']
 };
 
 const persistedReducer = persistReducer(persistConfig, dataSource);
@@ -33,3 +35,5 @@ ReactDOM.render(
         </PersistGate>
     </Provider>
     , document.getElementById('root'));*/
+
+// ReactDOM.render(<SheetJSApp/>, document.getElementById('root'));

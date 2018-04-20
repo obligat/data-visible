@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import ReactHighcharts from 'react-highcharts';
 import Table from './components/Table';
-import {resetTable, addRow, addColumnHeader, changeRow, chooseType} from "./actions";
+import {resetTable, addRow, addColumnHeader, changeRow, chooseType, importFile} from "./actions";
 import {connect} from "react-redux";
 import ReactIScroll from 'react-iscroll';
 import iScroll from 'iscroll';
 import axios, {post} from 'axios';
+import XLSX from 'xlsx';
 
 import HighchartsExporting from 'highcharts-exporting';
 import FileUpload from 'react-fileupload';
@@ -50,7 +51,8 @@ class App extends Component {
             file: null
         };
 
-        this.afterRender = this.afterRender.bind(this)
+        this.afterRender = this.afterRender.bind(this);
+        this.handleFile = this.handleFile.bind(this);
     }
 
     componentDidMount() {
@@ -91,33 +93,84 @@ class App extends Component {
 
     }
 
+    handleFile(file/*:File*/) {
+        /* Boilerplate to set up FileReader */
+        const reader = new FileReader();
+        const rABS = !!reader.readAsBinaryString;
+        reader.onload = (e) => {
+            /* Parse data */
+            const bstr = e.target.result;
+            const wb = XLSX.read(bstr, {type: rABS ? 'binary' : 'array'});
+            /* Get first worksheet */
+            const wsname = wb.SheetNames[0];
+            const ws = wb.Sheets[wsname];
+            /* Convert array of arrays */
+            const data = XLSX.utils.sheet_to_json(ws, {header: 1});
+            /* Update state */
+            this.props.importFile(data);
+        };
+        if (rABS) reader.readAsBinaryString(file); else reader.readAsArrayBuffer(file);
+    };
+
+    exportFile() {
+        /* convert state to workbook */
+        const ws = XLSX.utils.aoa_to_sheet(this.state.data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "SheetJS");
+        /* generate XLSX file and send to client */
+        XLSX.writeFile(wb, "sheetjs.xlsx")
+    };
+
+
     handleFileUpload(e) {
         this.setState({
             file: e.target.files[0]
         })
     }
 
-    handleClickUpload() {
-        this.fileUpload(this.state.file).then((response) => {
-            console.log('in response');
-            console.log(response);
-        })
-    }
+    /*  fileUpload(file) {
+          const url = 'http://127.0.0.1:3000/upload';
+          const formData = new FormData();
+          formData.append('file', file);
+          console.log(file);
+          console.log(formData);
 
-    fileUpload(file) {
-        const url = 'http://47.93.61.38:3000/upload';
-        const formData = new FormData();
-        formData.append('file', file);
-        console.log(file);
-        console.log(formData);
+          const config = {
+              headers: {
+                  'content-type': 'multipart/form-data'
+              }
+          };
+          return post(url, formData, config)
+      }*/
 
-        const config = {
-            headers: {
-                'content-type': 'multipart/form-data'
-            }
-        };
-        return post(url, formData, config)
-    }
+
+    /* to_csv(workbook) {
+         let result = [];
+         workbook.SheetNames.forEach(function (sheetName) {
+             let csv = XLSX.utils.make_csv(workbook.Sheets[sheetName]);
+             console.log(csv);
+             csv =csv.split('\n');
+             if (csv.length > 0) {
+                 result.push(sheetName);
+                 result.push(csv);
+             }
+         });
+         return result;
+     }*/
+
+    /*    to_csv(workbook) {
+           let result = [];
+           workbook.SheetNames.forEach(function(sheetName) {
+               let csv = XLSX.utils.sheet_to_csv(workbook.Sheets[sheetName]);
+               if(csv.length > 0){
+                   result.push("SHEET: " + sheetName);
+                   result.push("");
+                   result.push(csv);
+               }
+           });
+           return result.join("\n");
+       }
+   */
 
     render() {
         const {options, rows, chartTypes, curType} = this.props.tableData;
@@ -139,34 +192,12 @@ class App extends Component {
                         }
                     </div>
                     <Table/>
-                    <div className="highed-toolbar-right">
-                        <div className="highed-ok-button highed-toolbar-button" onClick={() => this.props.addRow()}>添加行
-                        </div>
-                        <div className="highed-ok-button highed-toolbar-button"
-                             onClick={() => this.props.addColumnHeader()}>添加列
-                        </div>
-                        <div className="highed-ok-button highed-toolbar-button"
-                             onClick={() => this.props.resetTable()}>清空数据
-                        </div>
-                        {/*<div className="highed-ok-button highed-toolbar-button"
-                         title="Import Google Spreadsheet">Google Sheet
-                    </div>*/}
-                        <div className="highed-ok-button highed-toolbar-button">
-                            <input type="file" name="file" onChange={(e) => this.handleFileUpload(e)}/>
-                            <button onClick={() => this.handleClickUpload()}>upload</button>
-                            {/* <FileUpload options={this.state.uploadOptions} ref={(el) => this.fileUpload = el}>
-                                <button ref={(el) => {
-                                    this.uploadBtn = el;
-                                }}>upload
-                                </button>
-                            </FileUpload>*/}
+                    <DragDropFile handleFile={this.handleFile}>
 
+                    </DragDropFile>
 
-                        </div>
-
-                        <div className="highed-ok-button highed-toolbar-button">导出数据</div>
-                    </div>
                 </ReactIScroll>
+
 
                 <div className="data-show-panel">
                     <ReactHighcharts config={options} callback={this.afterRender}/>
@@ -178,6 +209,21 @@ class App extends Component {
                                                                         key={index}>{optionOfType[item]}</option>)
                             }
                         </select>
+                    </div>
+
+                    <div className="highed-toolbar-right">
+                        <div className="highed-ok-button highed-toolbar-button" onClick={() => this.props.addRow()}>添加行
+                        </div>
+                        <div className="highed-ok-button highed-toolbar-button"
+                             onClick={() => this.props.addColumnHeader()}>添加列
+                        </div>
+                        <div className="highed-ok-button highed-toolbar-button"
+                             onClick={() => this.props.resetTable()}>清空数据
+                        </div>
+                        <div className="highed-ok-button highed-toolbar-button"><DataInput
+                            handleFile={this.handleFile}/>
+                        </div>
+                        <div className="highed-ok-button highed-toolbar-button">导出数据</div>
                     </div>
                 </div>
             </div>
@@ -216,9 +262,66 @@ function getEmptyArrByColumnLength(length) {
     return [...new Array(length)]
 }
 
+class DragDropFile extends React.Component {
+    constructor(props) {
+        super(props);
+        this.onDrop = this.onDrop.bind(this);
+    };
+
+    suppress(evt) {
+        evt.stopPropagation();
+        evt.preventDefault();
+    };
+
+    onDrop(evt) {
+        evt.stopPropagation();
+        evt.preventDefault();
+        const files = evt.dataTransfer.files;
+        if (files && files[0]) this.props.handleFile(files[0]);
+    };
+
+    render() {
+        return (
+            <div onDrop={this.onDrop} onDragEnter={this.suppress} onDragOver={this.suppress}  className="drag-container">
+                {this.props.children}
+            </div>
+        );
+    };
+}
+
+class DataInput extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleChange = this.handleChange.bind(this);
+    };
+
+    handleChange(e) {
+        const files = e.target.files;
+        if (files && files[0]) this.props.handleFile(files[0]);
+    };
+
+    render() {
+        return (
+            <div className="label-container">
+                <label htmlFor="file">导入数据</label>
+                <input type="file" className="btn-import" id="file" accept={SheetJSFT}
+                       onChange={this.handleChange}/>
+            </div>
+        );
+    };
+}
+
+
+const SheetJSFT = [
+    "xlsx", "xlsb", "xlsm", "xls", "xml", "csv", "txt", "ods", "fods", "uos", "sylk", "dif", "dbf", "prn", "qpw", "123",
+    "wb*", "wq*", "html", "htm"
+].map(function (x) {
+    return "." + x;
+}).join(",");
+
 
 const mapStateToProps = state => state;
-const mapDispatchToProps = ({resetTable, addRow, addColumnHeader, changeRow, chooseType});
+const mapDispatchToProps = ({resetTable, addRow, addColumnHeader, changeRow, chooseType, importFile});
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
