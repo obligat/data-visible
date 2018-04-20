@@ -29,12 +29,6 @@ class App extends Component {
         super(props);
 
         this.state = {
-            uploadOptions: {
-                baseUrl: 'http://127.0.0.1',
-                param: {
-                    fid: 0
-                }
-            },
             file: null
         };
 
