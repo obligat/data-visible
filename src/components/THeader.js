@@ -19,6 +19,7 @@ class Theader extends Component {
                 {
                     columns.map((item, index) => {
                         return (<div key={index} className="row-header-th">
+                            <i className="fa fas fa-bolt icon-bolt icon-bolt-focus"></i>
                             <input type="text" className="row-header-th-input"
                                    onChange={(e) => this.props.updateColumnHeader(index, e.target.value)}
                                    value={item.type}/>

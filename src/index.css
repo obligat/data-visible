@@ -55,7 +55,7 @@ html, body {
         position: relative;
         width: 130px;
         height: 100%;
-        padding: 1px;
+        padding: 5px;
         border-right: 1px solid #444;
         border-bottom: 1px solid #444;
         -webkit-box-sizing: border-box;
@@ -73,6 +73,19 @@ html, body {
           position: absolute;
           top: 10px;
           right: 2px; }
+        .table-container .table-wrapper .row-header-th .icon-bolt {
+          font-style: italic;
+          transform: scale(1.2); }
+          .table-container .table-wrapper .row-header-th .icon-bolt:hover {
+            -webkit-transform: scale(1.5);
+            -moz-transform: scale(1.5);
+            -ms-transform: scale(1.5);
+            -o-transform: scale(1.5);
+            transform: scale(1.5); }
+        .table-container .table-wrapper .row-header-th .icon-bolt-focus {
+          color: #e5e5e5; }
+        .table-container .table-wrapper .row-header-th .icon-bolt-normal {
+          color: #bdbdbd; }
     .table-container .table-wrapper .row-body {
       display: flex;
       flex-direction: column;
@@ -125,7 +138,7 @@ html, body {
       position: absolute;
       top: 0;
       left: 50vh;
-      z-index: 888; }
+      z-index: 2; }
       .data-show-panel .nav .chart-selection select {
         height: 31px; }
     .data-show-panel .nav .drag-container {
