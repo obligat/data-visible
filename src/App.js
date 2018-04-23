@@ -81,6 +81,44 @@ class App extends Component {
         return (
             <div className="highed-vsplitter">
 
+                <div className="data-show-panel">
+                    <div className="nav">
+                        <div className="chart-selection">
+                            <select name="chart-type" id="type" className="highed-ok-button highed-toolbar-button"
+                                    value={curType} onChange={(e) => this.props.chooseType(e.target.value)}>
+                                {
+                                    chartTypes.map((item, index) => <option value={item}
+                                                                            key={index}>{optionOfType[item]}</option>)
+                                }
+                            </select>
+                        </div>
+                        <div className="setting" style={{position: 'absolute', bottom: -30, left: 10, zIndex:999}}>
+                            <i className="fa fal fa-cog"></i>
+                        </div>
+                        <DragDropFile handleFile={this.handleFile}>
+
+                        </DragDropFile>
+
+                        <div className="highed-toolbar-right">
+                            <div className="highed-ok-button highed-toolbar-button"
+                                 onClick={() => this.props.exportFile()}>导出数据
+                            </div>
+                            <div className="highed-ok-button highed-toolbar-button"><DataInput
+                                handleFile={this.handleFile}/>
+                            </div>
+                            <div className="highed-ok-button highed-toolbar-button"
+                                 onClick={() => this.props.resetTable()}>清空数据
+                            </div>
+                            <div className="highed-ok-button highed-toolbar-button to-right"
+                                 onClick={() => this.props.addRow()}>添加行
+                            </div>
+                            <div className="highed-ok-button highed-toolbar-button"
+                                 onClick={() => this.props.addColumnHeader()}>添加列
+                            </div>
+                        </div>
+                    </div>
+                    <ReactHighcharts config={options} callback={this.afterRender}/>
+                </div>
                 <ReactIScroll iScroll={iScroll} className="table-container">
                     <div className="choose-all-checkbox">
                         <input type="checkbox" checked={isCheckedAllCols}
@@ -99,42 +137,6 @@ class App extends Component {
                     </div>
                     <Table/>
                 </ReactIScroll>
-
-                <div className="data-show-panel">
-                    <ReactHighcharts config={options} callback={this.afterRender}/>
-                    <div className="chart-selection">
-                        <select name="chart-type" id="type" className="highed-ok-button highed-toolbar-button"
-                                value={curType} onChange={(e) => this.props.chooseType(e.target.value)}>
-                            {
-                                chartTypes.map((item, index) => <option value={item}
-                                                                        key={index}>{optionOfType[item]}</option>)
-                            }
-                        </select>
-                    </div>
-                    <div className="setting" style={{position:'absolute', top:10,left:10}}>
-                        <i className="fa fal fa-cog"></i>
-                    </div>
-                    <DragDropFile handleFile={this.handleFile}>
-
-                    </DragDropFile>
-
-                    <div className="highed-toolbar-right">
-                        <div className="highed-ok-button highed-toolbar-button" onClick={() => this.props.addRow()}>添加行
-                        </div>
-                        <div className="highed-ok-button highed-toolbar-button"
-                             onClick={() => this.props.addColumnHeader()}>添加列
-                        </div>
-                        <div className="highed-ok-button highed-toolbar-button"
-                             onClick={() => this.props.resetTable()}>清空数据
-                        </div>
-                        <div className="highed-ok-button highed-toolbar-button"><DataInput
-                            handleFile={this.handleFile}/>
-                        </div>
-                        <div className="highed-ok-button highed-toolbar-button"
-                             onClick={() => this.props.exportFile()}>导出数据
-                        </div>
-                    </div>
-                </div>
             </div>
         );
     }

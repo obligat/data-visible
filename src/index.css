@@ -20,7 +20,7 @@ html, body {
   .table-container .choose-all-checkbox {
     position: absolute;
     top: 5px;
-    left: 13px;
+    right: 11px;
     display: flex;
     flex-direction: column; }
     .table-container .choose-all-checkbox input {
@@ -32,7 +32,7 @@ html, body {
     flex-direction: column;
     align-items: center;
     top: 40px;
-    left: 0;
+    right: 0;
     width: 40px;
     height: 100%; }
     .table-container .checkbox-wrapper .checkbox-item {
@@ -41,7 +41,8 @@ html, body {
       align-items: center; }
   .table-container .table-wrapper {
     position: relative;
-    left: 40px;
+    padding-left: 40px;
+    right: 40px;
     background: #333;
     overflow: scroll;
     height: 100%; }
@@ -111,35 +112,49 @@ html, body {
 
 .data-show-panel {
   flex: 1;
-  position: relative; }
-  .data-show-panel .btn-import {
-    display: none; }
-  .data-show-panel .drag-container {
-    position: absolute;
-    top: 60vh;
-    left: 10vh;
-    width: 80vh;
-    height: 30vh;
-    border-radius: 16px;
-    border: 4px dashed #9e9e9e2b; }
-    .data-show-panel .drag-container::after {
-      content: '拖放区域';
-      font-size: 50px;
-      color: #cccccc1f;
-      margin: 20vh; }
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: #fafafa; }
+  .data-show-panel .nav {
+    flex: 1;
+    position: relative; }
+    .data-show-panel .nav .btn-import {
+      display: none; }
+    .data-show-panel .nav .chart-selection {
+      position: absolute;
+      top: 0;
+      left: 50vh;
+      z-index: 888; }
+      .data-show-panel .nav .chart-selection select {
+        height: 31px; }
+    .data-show-panel .nav .drag-container {
+      position: absolute;
+      top: 10vh;
+      left: 10vh;
+      width: 80vh;
+      height: 30vh;
+      border-radius: 16px;
+      border: 4px dashed #9e9e9e2b; }
+      .data-show-panel .nav .drag-container::before {
+        content: '拖放区域';
+        font-size: 50px;
+        color: #cccccc1f;
+        display: block;
+        margin: 20px auto;
+        margin-left: 25vh; }
+      .data-show-panel .nav .drag-container::after {
+        content: '.xls .xlsx .csv';
+        font-size: 30px;
+        display: block;
+        color: #cccccc4d;
+        margin-left: 25vh; }
 
 /* 按钮样式 */
 .highed-toolbar-right {
   position: absolute;
   left: 5px;
-  bottom: 0; }
-
-.chart-selection {
-  position: absolute;
-  bottom: 0;
-  right: 0; }
-  .chart-selection select {
-    height: 28px; }
+  top: 0; }
 
 .highed-ok-button {
   border: none;
@@ -168,10 +183,13 @@ html, body {
   user-select: none; }
 
 .highed-ok-button:hover {
-  background: #4cb369; }
+  background: #4ba259; }
 
 .highed-toolbar-button {
   margin-right: 10px;
   margin-top: 15px;
   display: inline-block;
   cursor: pointer !important; }
+
+.to-right {
+  margin-left: 45vh; }
