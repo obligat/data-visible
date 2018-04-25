@@ -68,7 +68,7 @@ html, body {
         position: relative;
         width: 130px;
         height: 100%;
-        padding: 5px;
+        padding: 10px;
         border-right: 1px solid #444;
         border-bottom: 1px solid #444;
         -webkit-box-sizing: border-box;
@@ -93,7 +93,6 @@ html, body {
 
         .icon-bolt {
           font-style: italic;
-          transform: scale(1.2);
 
           &:hover {
             -webkit-transform: scale(1.5);
@@ -105,6 +104,7 @@ html, body {
         }
 
         .icon-bolt-focus {
+          transform: scale(1.2);
           color: #e5e5e5;
         }
 
@@ -181,7 +181,7 @@ html, body {
     .chart-selection {
       position: absolute;
       top: 0;
-      left: 50vh;
+      left: 90%;
       z-index: 2;
       select {
         height: 31px;
@@ -263,8 +263,4 @@ html, body {
   margin-top: 15px;
   display: inline-block;
   cursor: pointer !important
-}
-
-.to-right {
-  margin-left: 45vh;
 }
