@@ -101,3 +101,17 @@ export function cancelAllRows() {
         type: types.CANCEL_ALL_ROWS
     }
 }
+
+export function switchWordAndNumber(index) {
+    return {
+        type: types.SWITCH_WORD_AND_NUMBER,
+        payload: index
+    }
+}
+
+export function settingChart(options) {
+    return {
+        type: types.SETTING_CHART,
+        payload: options
+    }
+}

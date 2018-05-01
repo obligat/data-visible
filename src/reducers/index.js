@@ -34,7 +34,7 @@ const initialState = {
 
 const tableData = (state = initialState, action) => {
     const {options, columns, rows, colName} = state;
-    let newColumns;
+    let newColumns, newRows = [];
     switch (action.type) {
         case types.RESET_TABLE:
             initialState.rows = [];
@@ -89,6 +89,9 @@ const tableData = (state = initialState, action) => {
 
         case types.UPDATE_ROW_DATA:
             rows[action.i].data[action.j].value = fixNaN(action.payload);
+            if ('originValue' in rows[action.i].data[action.j]) {
+                rows[action.i].data[action.j].originValue = rows[action.i].data[action.j].value;
+            }
             options.series = getSeries(rows);
 
             return {...state};
@@ -105,7 +108,6 @@ const tableData = (state = initialState, action) => {
             let newCols = action.payload.shift();
             newCols = mapColumns(newCols);
             let rawRows = action.payload;
-            let newRows = [];
             rawRows.forEach(item => {
                 newRows.push(mapRow(item, newCols));
             });
@@ -159,6 +161,12 @@ const tableData = (state = initialState, action) => {
             options.series = getSeries(rows);
             return {...state};
 
+        case types.SWITCH_WORD_AND_NUMBER:
+            const hash = switchHash(getColArr(rows, action.payload));
+            newRows = mapColArr(rows, action.payload, hash);
+            options.series = getSeries(newRows);
+
+            return {...state, rows: newRows};
         default:
             return state;
     }
@@ -272,5 +280,68 @@ function handleExportFile(data) {
     XLSX.writeFile(wb, "sheetjs.xlsx")
 }
 
+/**
+ * 将一个数组里的值按照出现次数转为 hash 对象
+ * @param arr  eg：['男','女','男','男','女']
+ * @returns {{}} eg：{1:'男', 2:'女', '男':1, '女':2 }
+ */
+function switchHash(arr) {
+    const arrSet = [...new Set(arr)];
+    const hash = {};
+    arrSet.forEach((item, index) => {
+        hash[item] = index + 1;
+        hash[index + 1] = item;
+    });
+
+    return hash;
+}
+
+
+/**
+ * 得到每一列的数组
+ * @param rows
+ * @param index
+ * @returns {Array}
+ */
+function getColArr(rows, index) {
+    const copyRows = JSON.parse(JSON.stringify(rows));
+    const result = [];
+
+    copyRows.forEach(row => {
+        row.data.forEach((item, j) => {
+            if (j === index) {
+                const value = 'originValue' in item ? item.originValue : item.value;
+                result.push(value);
+            }
+        })
+    });
+
+    return result;
+}
+
+/**
+ * 将要转换的列的每个 row map 一下，添加 originValue 属性
+ * @param rows
+ * @param index
+ * @param hash
+ * @returns {any}
+ */
+function mapColArr(rows, index, hash) {
+    const copyRows = JSON.parse(JSON.stringify(rows));
+    copyRows.forEach(row => {
+        row.data.forEach((item, j) => {
+            if (j === index) {
+                if ('originValue' in item) {
+                    item.value = hash[item.value];
+                } else {
+                    item.originValue = item.value;
+                    item.value = hash[item.value];
+                }
+            }
+        })
+    });
+
+    return copyRows;
+}
 
 export default combineReducers({tableData})

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {updateColumnHeader, changeColumn} from '../actions';
+import {updateColumnHeader, changeColumn, switchWordAndNumber} from '../actions';
 
 class Theader extends Component {
     constructor(props) {
@@ -9,7 +9,11 @@ class Theader extends Component {
     }
 
     render() {
-        const {columns, colName} = this.props.tableData;
+        const {columns, colName, rows} = this.props.tableData;
+        let firstRowData = [];
+        if (rows[0]) {
+            firstRowData = rows[0].data;
+        }
 
         return (
             <div className="row-header">
@@ -19,7 +23,11 @@ class Theader extends Component {
                 {
                     columns.map((item, index) => {
                         return (<div key={index} className="row-header-th">
-                            <i className="fa fas fa-bolt icon-bolt icon-bolt-focus"></i>
+                            <i className={firstRowData[index] &&
+                            firstRowData[index].value === firstRowData[index].originValue ?
+                                "fa fas fa-bolt icon-bolt icon-bolt-normal" :
+                                "fa fas fa-bolt icon-bolt icon-bolt-focus"}
+                               onClick={() => this.props.switchWordAndNumber(index)}></i>
                             <input type="text" className="row-header-th-input"
                                    onChange={(e) => this.props.updateColumnHeader(index, e.target.value)}
                                    value={item.type}/>
@@ -35,7 +43,7 @@ class Theader extends Component {
 }
 
 const mapStateToProps = state => state;
-const mapDispatchToProps = ({updateColumnHeader, changeColumn});
+const mapDispatchToProps = ({updateColumnHeader, changeColumn, switchWordAndNumber});
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(Theader);
