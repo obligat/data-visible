@@ -29,22 +29,16 @@ class Row extends Component {
         this.props.updateRowName(i, e.target.value)
     }
 
-    handleFocus(index) {
+    handleFocus(e, index) {
         this.setState({
-            curIndex: index
+            curIndex: index,
+            value: e.target.value
         });
     }
 
     handleInputBlur(e, i, index) {
 
         const {value} = this.state;
-
-        this.setState({
-            isFocusName: false,
-            curIndex: undefined,
-            value: undefined
-        });
-
         if (index >= 0) {
             try {
                 this.props.updateRowData(i, index, value)
@@ -52,10 +46,19 @@ class Row extends Component {
                 console.log(err);
             }
         }
+
+        this.setState({
+            isFocusName: false,
+            curIndex: undefined,
+            value: undefined
+        });
     }
 
     handleKeyPress(e) {
         if (e.keyCode === 13) {
+            this.setState({
+                value: e.target.value
+            });
             e.currentTarget.blur()
         }
     }
@@ -78,7 +81,7 @@ class Row extends Component {
                         <input className={curIndex === index ? 'row-body-input-focus' : 'row-body-input-normal'}
                                value={curIndex === index ? value : item.value}
                                onChange={(e) => this.handleUpdateRowData(e, index)}
-                               onFocus={() => this.handleFocus(index)}
+                               onFocus={(e) => this.handleFocus(e, index)}
                                onBlur={(e) => this.handleInputBlur(e, i, index)}
                                onKeyDown={(e) => this.handleKeyPress(e)}
                         />
