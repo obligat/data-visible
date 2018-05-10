@@ -9,7 +9,6 @@ import {persistStore, persistReducer} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import {PersistGate} from 'redux-persist/integration/react';
 
-import SheetJSApp from './Test';
 
 const persistConfig = {
     key: 'root',
